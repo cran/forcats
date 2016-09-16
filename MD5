@@ -1,5 +1,6 @@
-56791a73c8196dd1f9bf400d45170078 *DESCRIPTION
+9070735ad51b212e23fc30cbb88f53b3 *DESCRIPTION
 f1d7105e658952f83d2f6d6a66bdc417 *NAMESPACE
+63ef02733e6ccad6e9b14133b90eb174 *NEWS.md
 60152a5c824e952d935c5115faecfeff *R/anon.R
 1cc3f567eb7c1dc639bf0f4ba5c65a98 *R/c.R
 19d3d2500a3a0e4828900c0216c865fa *R/collapse.R
@@ -18,7 +19,7 @@ f207a28cc9b667f80bae39161b9dfb4a *R/relevel.R
 43c8d95192b2a003e4af17afa2cf53cb *R/shuffle.R
 d65c2b2629a2565ce658a82dbc4df64b *R/unique.R
 ad3ac52696b44fed2d3ed63d8603966a *R/utils.R
-0b06688a55ae9800d1659445ceda995e *README.md
+273ea578a6d0074839dbaf2b9cda6870 *README.md
 a6984b4f6c2e70deebeca86c7b3d76ea *data/gss_cat.rda
 335f5b9256369ee4e6e6ea618ea33ea7 *man/fct_anon.Rd
 f3304ab26eaff4b4d9c78d60c1514453 *man/fct_c.Rd
@@ -43,7 +44,7 @@ f341d5a7d5df2568aa5f6b0e9a5847ce *man/lvls_union.Rd
 4f421d92452ec80d7c2c173103308bde *man/pipe.Rd
 7b0f13301043822509977d02384cb6e9 *tests/testthat.R
 b7276ce56a13629f4741508087849bf6 *tests/testthat/helper-lump.R
-6b79f83fdb9f537499c841a521d428d2 *tests/testthat/test-fct_lump.R
+d7983eae7ba0885bb291bf79db3b3add *tests/testthat/test-fct_lump.R
 9a377bf1595103a9efb55ec045caa463 *tests/testthat/test-fct_recode.R
 0b079406d723f6a7b46c1f073b9d7feb *tests/testthat/test-fct_relevel.R
 91fb88ab9805d3afa07f89f70fa9b818 *tests/testthat/test-fct_reorder.R
