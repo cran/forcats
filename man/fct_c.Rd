@@ -2,19 +2,28 @@
 % Please edit documentation in R/c.R
 \name{fct_c}
 \alias{fct_c}
-\title{Concatenate factors, unioning levels.}
+\title{Concatenate factors, combining levels}
 \usage{
-fct_c(fs)
+fct_c(fs, ...)
 }
 \arguments{
-\item{fs}{A list of factors}
+\item{fs}{A factor, or list of factors.}
+
+\item{...}{Individual factors}
 }
 \description{
 This is useful way of patching together factors from multiple sources
 that really should have the same levels but don't.
 }
 \examples{
-fs <- list(factor("a"), factor("b"), factor(c("a", "b")))
+fa <- factor("a")
+fb <- factor("b")
+fab <- factor(c("a", "b"))
+
+c(fa, fb, fab)
+fct_c(fa, fb, fab)
+
+# You can also pass a list of factors as the first argument
+fs <- list(fa, fb, fab)
 fct_c(fs)
 }
-

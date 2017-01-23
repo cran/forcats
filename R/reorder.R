@@ -1,18 +1,19 @@
-#' Reorder the levels of a function according to another variable
+#' Reorder factor levels by sorting along another variable
 #'
-#' \code{fct_reorder} is useful for 1d displays where the factor is mapped to
-#' position; \code{fct_reorder2} for 2d displays where the factor is mapped to
+#' `fct_reorder` is useful for 1d displays where the factor is mapped to
+#' position; `fct_reorder2` for 2d displays where the factor is mapped to
 #' a non-position aesthetic.
 #'
 #' @param f A factor
-#' @param x,y fun The levels of \code{f} will be reordered so that \code{fun}
-#'    apply to each group is in ascending order.
+#' @param x,y The levels of `f` are reordered so that the values
+#'    of `fun(x)` (for `fct_reorder()`) and `fun(x, y)` (for `fct_reorder2()`)
+#'    are in ascending order.
 #' @param fun An summary function. It should take one vector for
-#'   \code{fct_reorder}, and two vectors for \code{fct_reorder2}.
-#' @param ... Other arguments passed on to \code{fun}. A common argument is
-#'   \code{na.rm = TRUE}.
+#'   `fct_reorder`, and two vectors for `fct_reorder2`.
+#' @param ... Other arguments passed on to `fun`. A common argument is
+#'   `na.rm = TRUE`.
 #' @param .desc Order in descending order? Note the default is different
-#'   between \code{fct_reorder} and \code{fct_reorder2}, in order to
+#'   between `fct_reorder` and `fct_reorder2`, in order to
 #'   match the default ordering of factors in the legend.
 #' @importFrom stats median
 #' @export
@@ -66,8 +67,9 @@ last2 <- function(x, y) {
 }
 
 
-#' Reorders levels in order of first appearance or frequency.
+#' Reorder factors levels by first appearance or frequency
 #'
+#' @inheritParams lvls_reorder
 #' @param f A factor
 #' @export
 #' @examples
@@ -75,16 +77,18 @@ last2 <- function(x, y) {
 #' f
 #' fct_inorder(f)
 #' fct_infreq(f)
-fct_inorder <- function(f) {
+#'
+#' fct_inorder(f, ordered = TRUE)
+fct_inorder <- function(f, ordered = NA) {
   f <- check_factor(f)
 
-  lvls_reorder(f, as.integer(f)[!duplicated(f)])
+  lvls_reorder(f, as.integer(f)[!duplicated(f)], ordered = ordered)
 }
 
 #' @export
 #' @rdname fct_inorder
-fct_infreq <- function(f) {
+fct_infreq <- function(f, ordered = NA) {
   f <- check_factor(f)
 
-  lvls_reorder(f, order(table(f), decreasing = TRUE))
+  lvls_reorder(f, order(table(f), decreasing = TRUE), ordered = ordered)
 }

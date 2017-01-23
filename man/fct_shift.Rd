@@ -2,7 +2,7 @@
 % Please edit documentation in R/shift.R
 \name{fct_shift}
 \alias{fct_shift}
-\title{Shift the order of levels of a factor}
+\title{Shift factor levels to left or right, wrapping around at end}
 \usage{
 fct_shift(f, n = 1L)
 }
@@ -27,4 +27,3 @@ fct_shift(x)
 fct_shift(x, 2)
 fct_shift(x, -1)
 }
-

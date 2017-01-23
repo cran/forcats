@@ -1,86 +1,80 @@
-# forcats
 
-[CRAN_Status_Badge](http://www.r-pkg.org/badges/version/forcats)](https://cran.r-project.org/package=forcats)
-[![Travis-CI Build Status](https://travis-ci.org/hadley/forcats.svg?branch=master)](https://travis-ci.org/hadley/forcats)
-[![Coverage Status](https://img.shields.io/codecov/c/github/hadley/forcats/master.svg)](https://codecov.io/github/hadley/forcats?branch=master)
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+forcats <img src="logo.png" align="right" />
+============================================
 
-forcats provides tools for **cat**egorical variables (forcats is an anagram of factors).
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/forcats)](https://cran.r-project.org/package=forcats) [![Travis-CI Build Status](https://travis-ci.org/tidyverse/forcats.svg?branch=master)](https://travis-ci.org/tidyverse/forcats) [![Coverage Status](https://img.shields.io/codecov/c/github/tidyverse/forcats/master.svg)](https://codecov.io/github/tidyverse/forcats?branch=master)
 
-## Installation
+Overview
+--------
 
-You can install the released version of forcats from CRAN with:
+R uses **factors** to handle categorical variables, variables that have a fixed and known set of possible values. Historically, factors were much easier to work with than character vectors, so many base R functions automatically convert character vectors to factors. (For more historical context, I recommend [*stringsAsFactors: An unauthorized biography*](http://simplystatistics.org/2015/07/24/stringsasfactors-an-unauthorized-biography/) by Roger Peng, and [*stringsAsFactors = &lt;sigh&gt;*](http://notstatschat.tumblr.com/post/124987394001/stringsasfactors-sigh) by Thomas Lumley.) These days, making factors automatically is no longer so helpful, so packages in the [tidyverse](http://tidyverse.org) never create them automatically.
 
-```R
+However, factors are still useful when you have true categorical data, and when you want to override the ordering of character vectors to improve display. The goal of the **forcats** package is to provide a suite of useful tools that solve common problems with factors. If you're not familiar with strings, the best place to start is the [chapter on factors](http://r4ds.had.co.nz/factors.html) in R for Data Science.
+
+Installation
+------------
+
+``` r
+# The easiest way to get forcats is to install the whole tidyverse:
+install.packages("tidyverse")
+
+# Alternatively, install just forcats:
 install.packages("forcats")
-```
 
-Or the development version from github with:
-
-```R
+# Or the the development version from GitHub:
 # install.packages("devtools")
-devtools::install_github("hadley/forcats")
+devtools::install_github("tidyverse/forcats")
 ```
 
-## Key functions:
+Getting started
+---------------
 
-Change order of levels:
+forcats is not part of the core tidyverse, so you need to load it explicitly:
 
-* [`fct_relevel()`](https://hadley.github.io/forcats/fct_relevel.html): 
-  move specified level up front.
+``` r
+library(tidyverse)
+library(forcats)
+```
 
-* [`fct_inorder()`](https://hadley.github.io/forcats/fct_inorder.html): 
-  order by first appearance of each level.
+Factors are used to describe categorical variables with a fixed and known set of **levels**. You can create factors with the base `factor()` or [`readr::parse_factor()`](http://readr.tidyverse.org/reference/parse_factor.html):
 
-* [`fct_reorder()`](https://hadley.github.io/forcats/fct_reorder.html): 
-  order by summary of another value (same as `stats::reorder()`).
+``` r
+x1 <- c("Dec", "Apr", "Jan", "Mar")
+month_levels <- c(
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+)
 
-* [`fct_infreq()`](https://hadley.github.io/forcats/fct_inorder.html):  
-  order by frequency.
+factor(x1, month_levels)
+#> [1] Dec Apr Jan Mar
+#> Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 
-* [`fct_shuffle()`](https://hadley.github.io/forcats/fct_shuffle.html): 
-  randomly shuffle order of levels.
+parse_factor(x1, month_levels)
+#> [1] Dec Apr Jan Mar
+#> Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+```
 
-* [`fct_rev()`](https://hadley.github.io/forcats/fct_rev.html):
-  reverse order of levels.
+The advantage of `parse_factor()` is that it will generate a warning if values of `x` are not valid levels:
 
-* [`fct_shift()`](https://hadley.github.io/forcats/fct_shift.html):
-  shift levels to the left/right.
+``` r
+x2 <- c("Dec", "Apr", "Jam", "Mar")
 
-Change value of levels:
+factor(x2, month_levels)
+#> [1] Dec  Apr  <NA> Mar 
+#> Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 
-* [`fct_anon()`](https://hadley.github.io/forcats/fct_anon.html):
-  anonymise factor levels.
+parse_factor(x2, month_levels)
+#> Warning: 1 parsing failure.
+#> row col           expected actual
+#>   3  -- value in level set    Jam
+#> [1] Dec  Apr  <NA> Mar 
+#> attr(,"problems")
+#> # A tibble: 1 × 4
+#>     row   col           expected actual
+#>   <int> <int>              <chr>  <chr>
+#> 1     3    NA value in level set    Jam
+#> Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+```
 
-* [`fct_lump()`](https://hadley.github.io/forcats/fct_lump.html): 
-  lump rarest (or most common) levels into "other".
-
-* [`fct_recode()`](https://hadley.github.io/forcats/fct_recode.html):
-  manually recode levels.
-
-Add new levels:
-
-* [`fct_expand()`](https://hadley.github.io/forcats/fct_expand.html):
-  add new levels to a factor.
-
-* [`fct_explicit_na()`](https://hadley.github.io/forcats/fct_explicit_na.html): 
-  turn missing values into an explicit factor.
-
-A few other helpers:
-
-* [`fct_c()`](https://hadley.github.io/forcats/fct_c.html):
-  concatenate factors using union of levels.
-
-* [`fct_count()`](https://hadley.github.io/forcats/fct_count.html):  
-  count occurences of levels, optionally sorting by frequency.
-
-* [`fct_unify()`](https://hadley.github.io/forcats/fct_unify.html):  
-  ensure list of factors share the same levels.
-
-* [`fct_unique()`](https://hadley.github.io/forcats/fct_unique.html): 
-  compute from levels of factor.
-
-* [`fct_drop()`](https://hadley.github.io/forcats/fct_drop.html):
-  drop levels without data (same as `base::droplevels()`).
-
-* [`lvls_union()`](https://hadley.github.io/forcats/lvls_union.html): 
-  finds union of levels from list of factors.
+Once you have the factor, forcats provides helpers for solving common problems.

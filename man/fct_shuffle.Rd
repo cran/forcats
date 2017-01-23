@@ -2,7 +2,7 @@
 % Please edit documentation in R/shuffle.R
 \name{fct_shuffle}
 \alias{fct_shuffle}
-\title{Randomly permute the levels of a factor}
+\title{Randomly permute factor levels}
 \usage{
 fct_shuffle(f)
 }
@@ -10,11 +10,10 @@ fct_shuffle(f)
 \item{f}{A factor}
 }
 \description{
-Randomly permute the levels of a factor
+Randomly permute factor levels
 }
 \examples{
 f <- factor(c("a", "b", "c"))
 fct_shuffle(f)
 fct_shuffle(f)
 }
-

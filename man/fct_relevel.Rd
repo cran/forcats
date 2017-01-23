@@ -2,27 +2,43 @@
 % Please edit documentation in R/relevel.R
 \name{fct_relevel}
 \alias{fct_relevel}
-\title{Change the order of levels in a factor}
+\title{Reorder factor levels by hand}
 \usage{
-fct_relevel(f, ...)
+fct_relevel(f, ..., after = 0L)
 }
 \arguments{
 \item{f}{A factor.}
 
-\item{...}{Character vector of levels. Any levels not mentioned will be
-left in existing order, after the explicitly mentioned levels.}
+\item{...}{Character vector of levels. Any levels not mentioned will be left
+in existing order, after the explicitly mentioned levels.}
+
+\item{after}{Where should the new values be placed?}
 }
 \description{
-This is a generalisaton of \code{\link[stats]{relevel}} that allows you to
-move any number of levels to the front.
+This is a generalisaton of \code{\link[stats:relevel]{stats::relevel()}} that allows you to move any
+number of levels to any location.
 }
 \examples{
-f <- factor(c("a", "b", "c"))
+f <- factor(c("a", "b", "c", "d"))
 fct_relevel(f)
 fct_relevel(f, "c")
 fct_relevel(f, "b", "a")
 
-# You'll get a warning if the levels don't exist
-fct_relevel(f, "d")
-}
+# Move to the third position
+fct_relevel(f, "a", after = 2)
 
+# Relevel to the end
+fct_relevel(f, "a", after = Inf)
+fct_relevel(f, "a", after = 3)
+
+# Using 'Inf' allows you to relevel to the end when the number
+# of levels is unknown or variable (e.g. vectorised operations)
+df  <- forcats::gss_cat[, c("rincome", "denom")]
+lapply(df, levels)
+
+df2 <- lapply(df, fct_relevel, "Don't know", after = Inf)
+lapply(df2, levels)
+
+# You'll get a warning if the levels don't exist
+fct_relevel(f, "e")
+}

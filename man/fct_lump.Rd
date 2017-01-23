@@ -2,7 +2,7 @@
 % Please edit documentation in R/lump.R
 \name{fct_lump}
 \alias{fct_lump}
-\title{Lump together least/most common levels into "other".}
+\title{Lump together least/most common factor levels into "other"}
 \usage{
 fct_lump(f, n, prop, other_level = "Other", ties.method = c("min",
   "average", "first", "last", "random", "max"))
@@ -11,26 +11,26 @@ fct_lump(f, n, prop, other_level = "Other", ties.method = c("min",
 \item{f}{A factor.}
 
 \item{n, prop}{If both \code{n} and \code{prop} are missing, \code{fct_lump} lumps
-  together the least frequent levels into "other", while ensuring that
-  "other" is still the smallest level. It's particularly useful in
-  conjunction with \code{\link{fct_inorder}()}.
+together the least frequent levels into "other", while ensuring that
+"other" is still the smallest level. It's particularly useful in
+conjunction with \code{\link{fct_inorder}()}.
 
-  Positive \code{n} preserves the most common \code{n} values.
-  Negative \code{n} preserves the least common \code{-n} values.
-  It there are ties, you will get at least \code{abs(n)} values.
+Positive \code{n} preserves the most common \code{n} values.
+Negative \code{n} preserves the least common \code{-n} values.
+It there are ties, you will get at least \code{abs(n)} values.
 
-  Positive \code{prop}, preserves values that appear at least
-  \code{prop} of the time. Negative \code{prop}, preserves values that
-  appear at most \code{-prop} of the time.}
+Positive \code{prop}, preserves values that appear at least
+\code{prop} of the time. Negative \code{prop}, preserves values that
+appear at most \code{-prop} of the time.}
 
 \item{other_level}{Value of level used for "other" values. Always
 placed at end of levels.}
 
 \item{ties.method}{A character string specifying how ties are
-treated. See \code{\link{rank}} for details}
+treated. See \code{\link[=rank]{rank()}} for details}
 }
 \description{
-Lump together least/most common levels into "other".
+Lump together least/most common factor levels into "other"
 }
 \examples{
 x <- factor(rep(LETTERS[1:9], times = c(40, 10, 5, 27, 1, 1, 1, 1, 1)))
@@ -56,4 +56,6 @@ fct_lump(x, n = 6)
 fct_lump(x, n = 6, ties.method = "max")
 
 }
-
+\seealso{
+\code{\link[=fct_other]{fct_other()}} to convert specified levels to other.
+}
