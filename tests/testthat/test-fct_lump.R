@@ -55,6 +55,58 @@ test_that("different behaviour when apply tie function", {
   }
 })
 
+test_that("NAs included in total", {
+  f <- factor(c("a", "a", "b", rep(NA, 7)))
+
+  o1 <- fct_lump(f, prop = 0.10)
+  expect_equal(levels(o1), c("a", "Other"))
+
+  o2 <- fct_lump(f, w = rep(1, 10), prop = 0.10)
+  expect_equal(levels(o2), c("a", "Other"))
+})
+
+test_that("bad weights generate error messages", {
+  expect_error(fct_lump(letters, w = letters), "must be a numeric vector")
+  expect_error(fct_lump(letters, w = 1:10), "must be the same length")
+  expect_error(fct_lump(letters, w = rep(-1, 26)), "must be non-negative")
+})
+
+test_that("values are correctly weighted", {
+  f <- c("a", "a", "a", "b", "b", "c", "d", "e", "f", "g")
+  w <- c( 0.2, 0.2, 0.6, 2,   2,   6,   4,   2,   2,   1)
+  f2 <- c(
+    "a",
+    rep("b", 4),
+    rep("c", 6),
+    rep("d", 4),
+    rep("e", 2),
+    rep("f", 2),
+    "g"
+  )
+
+  expect_equal(levels(fct_lump(f, w = w)), levels(fct_lump(f2)))
+  expect_equal(
+    levels(fct_lump(f, n = 1, w = w)),
+    levels(fct_lump(f2, n = 1))
+  )
+  expect_equal(
+    levels(fct_lump(f, n = -2, w = w, ties.method = "first")),
+    levels(fct_lump(f2, n = -2, ties.method = "first"))
+  )
+  expect_equal(
+    levels(fct_lump(f, n = 99, w = w)),
+    levels(fct_lump(f2, n = 99))
+  )
+  expect_equal(
+    levels(fct_lump(f, prop = 0.01, w = w)),
+    levels(fct_lump(f2, prop = 0.01))
+  )
+  expect_equal(
+    levels(fct_lump(f, prop = -0.25, w = w, ties.method = "max")),
+    levels(fct_lump(f2, prop = -0.25, ties.method = "max"))
+  )
+})
+
 # Default -----------------------------------------------------------------
 
 test_that("lumps smallest", {

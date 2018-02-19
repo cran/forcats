@@ -1,6 +1,6 @@
 #' Lump together least/most common factor levels into "other"
 #'
-#' @param f A factor.
+#' @param f A factor (or character vector).
 #' @param n,prop
 #'   If both `n` and `prop` are missing, `fct_lump` lumps
 #'   together the least frequent levels into "other", while ensuring that
@@ -11,13 +11,15 @@
 #'   Negative `n` preserves the least common `-n` values.
 #'   It there are ties, you will get at least `abs(n)` values.
 #'
-#'   Positive `prop`, preserves values that appear at least
-#'   `prop` of the time. Negative `prop`, preserves values that
+#'   Positive `prop` preserves values that appear at least
+#'   `prop` of the time. Negative `prop` preserves values that
 #'   appear at most `-prop` of the time.
+#' @param w An optional numeric vector giving weights for frequency of
+#'   each value (not level) in f.
 #' @param other_level Value of level used for "other" values. Always
 #'   placed at end of levels.
 #' @param ties.method A character string specifying how ties are
-#'   treated. See [rank()] for details
+#'   treated. See [rank()] for details.
 #' @export
 #' @seealso [fct_other()] to convert specified levels to other.
 #' @examples
@@ -39,20 +41,31 @@
 #' fct_lump(x, n = -3)
 #' fct_lump(x, prop = -0.1)
 #'
+#' # Use weighted frequencies
+#' w <- c(rep(2, 50), rep(1, 50))
+#' fct_lump(x, n = 5, w = w)
+#'
 #' # Use ties.method to control how tied factors are collapsed
 #' fct_lump(x, n = 6)
 #' fct_lump(x, n = 6, ties.method = "max")
 #'
-fct_lump <- function(f, n, prop, other_level = "Other",
+fct_lump <- function(f, n, prop, w = NULL, other_level = "Other",
                      ties.method = c("min", "average", "first", "last", "random", "max")) {
   f <- check_factor(f)
+  w <- check_weights(w, length(f))
   ties.method <- match.arg(ties.method)
 
   levels <- levels(f)
-  count <- table(f)
+  if (is.null(w)) {
+    count <- as.vector(table(f))
+    total <- length(f)
+  } else {
+    count <- as.vector(tapply(w, f, FUN = sum))
+    total <- sum(w)
+  }
 
   if (!xor(missing(n), missing(prop))) {
-    new_levels <- ifelse(!in_smallest(table(f)), levels, other_level)
+    new_levels <- ifelse(!in_smallest(count), levels, other_level)
   } else if (!missing(n)) {
     if (n < 0) {
       rank <- rank(count, ties = ties.method)
@@ -64,7 +77,7 @@ fct_lump <- function(f, n, prop, other_level = "Other",
     new_levels <- ifelse(rank <= n, levels, other_level)
 
   } else if (!missing(prop)) {
-    prop_n <- count / sum(count)
+    prop_n <- count / total
     if (prop < 0) {
       new_levels <- ifelse(prop_n <= -prop, levels, other_level)
     } else {
@@ -106,4 +119,32 @@ in_smallest <- function(x) {
   to_lump <- seq_along(x) >= idx
   # Undo initial ordering
   to_lump[order(ord_x)]
+}
+
+check_weights <- function(w, n = length(w)) {
+  if (is.null(w)) {
+    return(w)
+  }
+
+  if (!is.numeric(w)) {
+    stop("`w` must be a numeric vector", call. = FALSE)
+  }
+
+  if (length(w) != n) {
+    stop(
+      "`w` must be the same length as `f` (", n, "), not length ", length(w),
+      call. = FALSE
+    )
+  }
+
+  bad <- w < 0 | is.na(w)
+  if (any(bad)) {
+    stop(
+      "All `w` must be non-negative and non-missing. Problems at positions: ",
+      paste0(which(bad), collapse = ", "),
+      call. = FALSE
+    )
+  }
+
+  w
 }

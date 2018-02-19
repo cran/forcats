@@ -4,14 +4,17 @@
 \alias{fct_relabel}
 \title{Automatically relabel factor levels, collapse as necessary}
 \usage{
-fct_relabel(f, fun, ...)
+fct_relabel(.f, .fun, ...)
 }
 \arguments{
-\item{f}{A factor}
+\item{.f}{A factor.}
 
-\item{fun}{A function that is applied to each level. Must accept one
-character argument and return a character vector of the same length as its
-input.}
+\item{.fun}{A function to be applied to each level. Must accept one
+character argument and return a character vector of the same length as
+its input.
+
+You can also use \code{~} to create as shorthand (in the style of purrr).
+\code{~ paste(., "x")} is equivalent to \code{function(.) paste(., "x")}}
 
 \item{...}{Additional arguments to \code{fun}.}
 }
@@ -19,7 +22,8 @@ input.}
 Automatically relabel factor levels, collapse as necessary
 }
 \examples{
-fct_count(gss_cat$rincome)
+gss_cat$partyid \%>\% fct_count()
+gss_cat$partyid \%>\% fct_relabel(~ gsub(",", ", ", .x)) \%>\% fct_count()
 
 convert_income <- function(x) {
   regex <- "^(?:Lt |)[$]([0-9]+).*$"
@@ -29,9 +33,8 @@ convert_income <- function(x) {
   x[is_range] <- paste0("Gt $", num_income)
   x
 }
-
+fct_count(gss_cat$rincome)
 convert_income(levels(gss_cat$rincome))
-
 rincome2 <- fct_relabel(gss_cat$rincome, convert_income)
 fct_count(rincome2)
 }

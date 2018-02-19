@@ -7,11 +7,11 @@
 fct_other(f, keep, drop, other_level = "Other")
 }
 \arguments{
-\item{f}{A factor.}
+\item{f}{A factor (or character vector).}
 
 \item{keep, drop}{\code{keep} will preserve listed levels, replacing all others
-\code{other_level}. \code{drop} will replace listed levels with \code{other_level}
-keep as they are.}
+with \code{other_level}. \code{drop} will replace listed levels with \code{other_level},
+keeping all others as they are.}
 
 \item{other_level}{Value of level used for "other" values. Always
 placed at end of levels.}

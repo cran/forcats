@@ -3,23 +3,26 @@
 \name{fct_reorder}
 \alias{fct_reorder}
 \alias{fct_reorder2}
+\alias{last2}
 \title{Reorder factor levels by sorting along another variable}
 \usage{
-fct_reorder(f, x, fun = median, ..., .desc = FALSE)
+fct_reorder(.f, .x, .fun = median, ..., .desc = FALSE)
 
-fct_reorder2(f, x, y, fun = last2, ..., .desc = TRUE)
+fct_reorder2(.f, .x, .y, .fun = last2, ..., .desc = TRUE)
+
+last2(.x, .y)
 }
 \arguments{
-\item{f}{A factor}
+\item{.f}{A factor (or character vector).}
 
-\item{x, y}{The levels of \code{f} are reordered so that the values
-of \code{fun(x)} (for \code{fct_reorder()}) and \code{fun(x, y)} (for \code{fct_reorder2()})
+\item{.x, .y}{The levels of \code{f} are reordered so that the values
+of \code{.fun(.x)} (for \code{fct_reorder()}) and \code{fun(.x, .y)} (for \code{fct_reorder2()})
 are in ascending order.}
 
-\item{fun}{An summary function. It should take one vector for
+\item{.fun}{n summary function. It should take one vector for
 \code{fct_reorder}, and two vectors for \code{fct_reorder2}.}
 
-\item{...}{Other arguments passed on to \code{fun}. A common argument is
+\item{...}{Other arguments passed on to \code{.fun}. A common argument is
 \code{na.rm = TRUE}.}
 
 \item{.desc}{Order in descending order? Note the default is different
@@ -27,9 +30,10 @@ between \code{fct_reorder} and \code{fct_reorder2}, in order to
 match the default ordering of factors in the legend.}
 }
 \description{
-\code{fct_reorder} is useful for 1d displays where the factor is mapped to
-position; \code{fct_reorder2} for 2d displays where the factor is mapped to
-a non-position aesthetic.
+\code{fct_reorder()} is useful for 1d displays where the factor is mapped to
+position; \code{fct_reorder2()} for 2d displays where the factor is mapped to
+a non-position aesthetic. \code{last2()} is a helper for \code{fct_reorder2()};
+it finds the last value of \code{y} when sorted by \code{x}.
 }
 \examples{
 boxplot(Sepal.Width ~ Species, data = iris)

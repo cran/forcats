@@ -1,9 +1,9 @@
 #' Low-level functions for manipulating levels
 #'
-#' `lvls_reorder` leaves values as is, but changes the order.
+#' `lvls_reorder` leaves values as they are, but changes the order.
 #' `lvls_revalue` changes the values of existing levels; there must
 #' be one new level for each old level.
-#' `lvls_extend` extends the set of levels; the new level must
+#' `lvls_expand` expands the set of levels; the new levels must
 #' include the old levels.
 #'
 #' These functions are less helpful than the higher-level `fct_` functions,
@@ -11,9 +11,9 @@
 #' because they are more specific, and hence can more carefully check their
 #' arguments.
 #'
-#' @param f A factor
-#' @param idx A integer index, with one integer for each existing level
-#' @param new_levels A character vector of new levels
+#' @param f A factor (or character vector).
+#' @param idx A integer index, with one integer for each existing level.
+#' @param new_levels A character vector of new levels.
 #' @param ordered A logical which determines the "ordered" status of the
 #'   output factor. `NA` preserves the existing status of the factor.
 #' @name lvls
@@ -51,16 +51,30 @@ lvls_revalue <- function(f, new_levels) {
     stop(
       "`new_levels` must be the same length as `levels(f)`: expected ",
       nlevels(f), " new levels, got ", length(new_levels), ".",
-      call. = FALSE)
+      call. = FALSE
+    )
   }
 
-  levels(f) <- new_levels
-  f
+  if (anyDuplicated(new_levels)) {
+    # Collapse levels, creating a new factor
+    u_levels <- unique(new_levels)
+    index <- match(new_levels, u_levels)
+
+    out <- index[f]
+    attributes(out) <- attributes(f)
+    attr(out, "levels") <- u_levels
+    out
+  } else {
+    attr(f, "levels") <- new_levels
+    f
+  }
 }
 
 #' @export
 #' @rdname lvls
 lvls_expand <- function(f, new_levels) {
+  f <- check_factor(f)
+
   missing <- setdiff(levels(f), new_levels)
   if (length(missing) > 0) {
     stop(

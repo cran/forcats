@@ -4,11 +4,11 @@
 \alias{fct_lump}
 \title{Lump together least/most common factor levels into "other"}
 \usage{
-fct_lump(f, n, prop, other_level = "Other", ties.method = c("min",
-  "average", "first", "last", "random", "max"))
+fct_lump(f, n, prop, w = NULL, other_level = "Other",
+  ties.method = c("min", "average", "first", "last", "random", "max"))
 }
 \arguments{
-\item{f}{A factor.}
+\item{f}{A factor (or character vector).}
 
 \item{n, prop}{If both \code{n} and \code{prop} are missing, \code{fct_lump} lumps
 together the least frequent levels into "other", while ensuring that
@@ -19,15 +19,18 @@ Positive \code{n} preserves the most common \code{n} values.
 Negative \code{n} preserves the least common \code{-n} values.
 It there are ties, you will get at least \code{abs(n)} values.
 
-Positive \code{prop}, preserves values that appear at least
-\code{prop} of the time. Negative \code{prop}, preserves values that
+Positive \code{prop} preserves values that appear at least
+\code{prop} of the time. Negative \code{prop} preserves values that
 appear at most \code{-prop} of the time.}
+
+\item{w}{An optional numeric vector giving weights for frequency of
+each value (not level) in f.}
 
 \item{other_level}{Value of level used for "other" values. Always
 placed at end of levels.}
 
 \item{ties.method}{A character string specifying how ties are
-treated. See \code{\link[=rank]{rank()}} for details}
+treated. See \code{\link[=rank]{rank()}} for details.}
 }
 \description{
 Lump together least/most common factor levels into "other"
@@ -50,6 +53,10 @@ fct_lump(x, prop = 0.1)
 # Use negative values to collapse the most common
 fct_lump(x, n = -3)
 fct_lump(x, prop = -0.1)
+
+# Use weighted frequencies
+w <- c(rep(2, 50), rep(1, 50))
+fct_lump(x, n = 5, w = w)
 
 # Use ties.method to control how tied factors are collapsed
 fct_lump(x, n = 6)
