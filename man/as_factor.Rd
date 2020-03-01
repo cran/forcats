@@ -5,7 +5,8 @@
 \alias{as_factor.factor}
 \alias{as_factor.character}
 \alias{as_factor.numeric}
-\title{Convert input to a factor.}
+\alias{as_factor.logical}
+\title{Convert input to a factor}
 \usage{
 as_factor(x, ...)
 
@@ -14,6 +15,8 @@ as_factor(x, ...)
 \method{as_factor}{character}(x, ...)
 
 \method{as_factor}{numeric}(x, ...)
+
+\method{as_factor}{logical}(x, ...)
 }
 \arguments{
 \item{x}{Object to coerce to a factor.}
@@ -21,18 +24,28 @@ as_factor(x, ...)
 \item{...}{Other arguments passed down to method.}
 }
 \description{
-Compared to base R, this function creates levels in the order in which
-they appear, which will be the same on every platform. (Base R sorts in
-the current locale which can vary from place to place.)
+Compared to base R, when \code{x} is a character, this function creates
+levels in the order in which they appear, which will be the same on every
+platform. (Base R sorts in the current locale which can vary from place
+to place.) When \code{x} is numeric, the ordering is based on the numeric
+value and consistent with base R.
 }
 \details{
 This is a generic function.
 }
 \examples{
+# Character object
 x <- c("a", "z", "g")
 as_factor(x)
 as.factor(x)
+
+# Character object containing numbers
 y <- c("1.1", "11", "2.2", "22")
 as_factor(y)
 as.factor(y)
+
+# Numeric object
+z <- as.numeric(y)
+as_factor(z)
+as.factor(z)
 }
