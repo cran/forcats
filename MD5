@@ -1,6 +1,7 @@
-ed059d0f9922140e7e90134ff0b6720e *DESCRIPTION
+983fd92fcc3d571a2d5630dde33ccedf *DESCRIPTION
+500bcbd26c47066e09614bf631a00918 *LICENSE
 780cd0cdc58864922d71e9c010211739 *NAMESPACE
-9c85b339fb5ca4cf99a794a810aec6c0 *NEWS.md
+9c3555dc1526be6e4468cea5f6755d5d *NEWS.md
 cf979f222168935b98e6f459d69194e4 *R/anon.R
 dcc63b5bf2c0954cb34b993ba072e297 *R/as_factor.R
 e6d789c894ecef380a931e1d5ebd81e5 *R/c.R
@@ -12,11 +13,11 @@ d8e8d579a2ec5210c9a4a996091f6f71 *R/count.R
 e52c94afc8327e95ae50e52d69a3d033 *R/explicit_na.R
 a8e619633853b9a42871596ffbbe94ac *R/fct_cross.R
 0f95d2e1d6ec424ddfbffff4a4c3219d *R/forcats-package.R
-ce7b6bb08ae927eacfeb7e7bc9585ab3 *R/lump.R
+e9094fe6a0dcbfcb840ede2c5b8e1103 *R/lump.R
 cd0818ab06b278ddc2a38b5a3eaab4d9 *R/lvls.R
 f701fe9a2e7e2ccd79d26ed0a76a251a *R/match.R
 4e286d23ca44d4d51ba7e397d133f331 *R/other.R
-2753e3c7d3b76e47f5ad1031feb05608 *R/recode.R
+ff6cb2f766a35e36a8a120167fec2549 *R/recode.R
 4bd623be18ab9156e9efdd29420aa0d9 *R/relabel.R
 e772aeb904377754fa635cf506d8b338 *R/relevel.R
 680bf5f7dba595608121037a8af6c7d6 *R/reorder.R
@@ -25,12 +26,12 @@ e772aeb904377754fa635cf506d8b338 *R/relevel.R
 9aebfd5ecc427de639e076a022cb0a53 *R/shuffle.R
 ee5201d1d40e6b81689639f92ae9fa2d *R/unique.R
 c52b4d9474163408c423eb70f81192aa *R/utils.R
-e746dfa6f296da84432ea08456ede39a *README.md
-87b38c7245e1ed39b1b78ed4a6275535 *build/vignette.rds
+d87077a46593582e9c43c7b27735253a *README.md
+28eb22be0d650707e2b88afc09bc0d31 *build/vignette.rds
 a6984b4f6c2e70deebeca86c7b3d76ea *data/gss_cat.rda
 ea759ae100f92e20d17c15daef35c86f *inst/doc/forcats.R
-ead0f2b9d582e9cb3cd6d06847688c5f *inst/doc/forcats.Rmd
-984103d16a12753a99073537ea5f214b *inst/doc/forcats.html
+dc8f167e825729287fe0728feb22ad27 *inst/doc/forcats.Rmd
+467c1b545fd4f0d6f366fcc34046ad56 *inst/doc/forcats.html
 b7ee1e2072b474ba8ea48f495361cc2f *man/as_factor.Rd
 4334dc56c28f8b2cb0a1980e696da92f *man/fct_anon.Rd
 e10a6e7d3527d4948d37dddcdeaeb977 *man/fct_c.Rd
@@ -44,7 +45,7 @@ c42f9c956059fefbefe126474e29a233 *man/fct_drop.Rd
 ad30109a59ec774059c975a59350721e *man/fct_lump.Rd
 4ef733cedba6eda64440603d8ee6d8c9 *man/fct_match.Rd
 7fe8a819595d5bd5ac505fabbd376c52 *man/fct_other.Rd
-d8e4b8e12fb56addf7ff5bd005961afc *man/fct_recode.Rd
+d86392e9a40f6ce7c5fdfeca710fcf99 *man/fct_recode.Rd
 a8e656d7bb297da6570fc4e71d0ed371 *man/fct_relabel.Rd
 7de16d981fa0f6512cb4a0cadc554d5f *man/fct_relevel.Rd
 eed6b04c5f3e8e65d12f1c4c974ced4e *man/fct_reorder.Rd
@@ -56,8 +57,8 @@ e37efbf13b7923999c1412bcb819a57b *man/fct_shuffle.Rd
 97e4bac3f9f1f57ec24faa501d478125 *man/figures/README-ordered-plot-1.png
 37d177544117670d5cdedafc1f931282 *man/figures/README-unordered-plot-1.png
 3252fda93a16a69b6deb795c4866b7cb *man/figures/logo.png
-dfd1113e7a3b748c0ae95d58a387823e *man/forcats-package.Rd
-0c85674bbbcc6f0164622c5ad556bda2 *man/gss_cat.Rd
+c1b0f984c1ec4016b2d7d79e29b87e91 *man/forcats-package.Rd
+3b96c4cdca0257f6c8e68e7b2bd1e625 *man/gss_cat.Rd
 679f67140aa7a12ffa8e2644324a1231 *man/lvls.Rd
 50ed89e2798ad529ca69dad8d85851dd *man/lvls_union.Rd
 0f020b37daf27c2fd4c78c574285ef1b *man/pipe.Rd
@@ -84,4 +85,4 @@ e8e369f72b8bd87b6c53c3a881e79e04 *tests/testthat/test-lvls_reorder.R
 a0df68c919a132b10db11d2d2a37fa9c *tests/testthat/test-shift.R
 9804486a2ed35c047035d010ea9b99cc *tests/testthat/test-shuffle.R
 ace13f92d674afbc6a66b69ab55e2db8 *tests/testthat/test-utils.R
-ead0f2b9d582e9cb3cd6d06847688c5f *vignettes/forcats.Rmd
+dc8f167e825729287fe0728feb22ad27 *vignettes/forcats.Rmd
