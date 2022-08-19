@@ -11,12 +11,12 @@ fct_relevel(.f, ..., after = 0L)
 
 \item{...}{Either a function (or formula), or character levels.
 
-A function will be called with the current levels, and the return
-value (which must be a character vector) will be used to relevel the
-function.
+A function will be called with the current levels as input, and the
+return value (which must be a character vector) will be used to relevel
+the factor.
 
-Any levels not mentioned will be left in their existing order, after the
-explicitly mentioned levels. Supports tidy dots.}
+Any levels not mentioned will be left in their existing order, by default
+after the explicitly mentioned levels. Supports tidy dots.}
 
 \item{after}{Where should the new values be placed?}
 }
@@ -44,7 +44,7 @@ fct_relevel(f, rev)
 
 # Using 'Inf' allows you to relevel to the end when the number
 # of levels is unknown or variable (e.g. vectorised operations)
-df  <- forcats::gss_cat[, c("rincome", "denom")]
+df <- forcats::gss_cat[, c("rincome", "denom")]
 lapply(df, levels)
 
 df2 <- lapply(df, fct_relevel, "Don't know", after = Inf)
