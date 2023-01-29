@@ -21,15 +21,15 @@ reordering character vectors to improve display. The goal of the
 problems with factors, including changing the order of levels or the
 values. Some examples include:
 
--   `fct_reorder()`: Reordering a factor by another variable.
--   `fct_infreq()`: Reordering a factor by the frequency of values.
--   `fct_relevel()`: Changing the order of a factor by hand.
--   `fct_lump()`: Collapsing the least/most frequent values of a factor
-    into “other”.
+- `fct_reorder()`: Reordering a factor by another variable.
+- `fct_infreq()`: Reordering a factor by the frequency of values.
+- `fct_relevel()`: Changing the order of a factor by hand.
+- `fct_lump()`: Collapsing the least/most frequent values of a factor
+  into “other”.
 
 You can learn more about each of these in `vignette("forcats")`. If
 you’re new to factors, the best place to start is the [chapter on
-factors](https://r4ds.had.co.nz/factors.html) in R for Data Science.
+factors](https://r4ds.hadley.nz/factors.html) in R for Data Science.
 
 ## Installation
 
@@ -114,7 +114,7 @@ starwars %>%
 
 For a history of factors, I recommend [*stringsAsFactors: An
 unauthorized
-biography*](https://simplystatistics.org/posts/2015-07-24-stringsasfactors-an-unauthorized-biography/)
+biography*](https://simplystats.github.io/2015/07/24/stringsasfactors-an-unauthorized-biography/)
 by Roger Peng and [*stringsAsFactors =
 \<sigh\>*](https://notstatschat.tumblr.com/post/124987394001/stringsasfactors-sigh)
 by Thomas Lumley. If you want to learn more about other approaches to

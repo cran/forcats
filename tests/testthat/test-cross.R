@@ -63,3 +63,11 @@ test_that("can combine more than two factors", {
 
   expect_setequal(levels(f2), c("apple:green:no", "apple:green:yes", "apple:red:yes", "kiwi:green:no"))
 })
+
+test_that("validates its inputs", {
+  expect_snapshot(error = TRUE, {
+    fct_cross(x = "x")
+    fct_cross("x", sep = 1)
+    fct_cross("x", keep_empty = 1)
+  })
+})

@@ -1,9 +1,10 @@
-#' Lump together factor levels into "other"
+#' Lump uncommon factor together levels into "other"
 #'
 #' @description
 #' A family for lumping together levels that meet some criteria.
 #' * `fct_lump_min()`: lumps levels that appear fewer than `min` times.
-#' * `fct_lump_prop()`: lumps levels that appear in fewer `prop * n` times.
+#' * `fct_lump_prop()`: lumps levels that appear in fewer than (or equal to)
+#'    `prop * n` times.
 #' * `fct_lump_n()` lumps all levels except for the `n` most frequent
 #'    (or least frequent if `n < 0`)
 #' * `fct_lump_lowfreq()` lumps together the least frequent levels, ensuring
@@ -71,134 +72,92 @@
 #' table(fct_lump_min(x, min = 15))
 fct_lump <- function(f, n, prop, w = NULL, other_level = "Other",
                      ties.method = c("min", "average", "first", "last", "random", "max")) {
-  ties.method <- match.arg(ties.method)
-  check_calc_levels(f, w)
-
-
   if (missing(n) && missing(prop)) {
-    fct_lump_lowfreq(f, other_level = other_level)
+    fct_lump_lowfreq(f, w = w, other_level = other_level)
   } else if (missing(prop)) {
-    fct_lump_n(f, n, w, other_level, ties.method)
+    fct_lump_n(f, n, w = w, other_level = other_level, ties.method = ties.method)
   } else if (missing(n)) {
-    fct_lump_prop(f, prop, w, other_level)
+    fct_lump_prop(f, prop, w = w, other_level = other_level)
   } else {
-    cli::cli_abort("Must supply only one of {.arg n} and {.arg prop}")
+    cli::cli_abort("Must supply only one of {.arg n} and {.arg prop}.")
   }
 }
 
 #' @export
 #' @rdname fct_lump
 fct_lump_min <- function(f, min, w = NULL, other_level = "Other") {
-  calcs <- check_calc_levels(f, w)
-  f <- calcs$f
+  f <- check_factor(f)
+  check_number_decimal(min, min = 0)
+  check_string(other_level, allow_na = TRUE)
 
-  if (!is.numeric(min) || length(min) != 1 || min < 0) {
-    cli::cli_abort("{.arg min} must be a positive number")
-  }
-
-  new_levels <- ifelse(calcs$count >= min, levels(f), other_level)
-
-  if (other_level %in% new_levels) {
-    f <- lvls_revalue(f, new_levels)
-    fct_relevel(f, other_level, after = Inf)
-  } else {
-    f
-  }
+  level_w <- compute_weights(f, w)
+  lvls_other(f, level_w >= min, other_level)
 }
 
 #' @export
 #' @rdname fct_lump
 fct_lump_prop <- function(f, prop, w = NULL, other_level = "Other") {
-  calcs <- check_calc_levels(f, w)
-  f <- calcs$f
+  f <- check_factor(f)
+  check_number_decimal(prop)
+  check_string(other_level, allow_na = TRUE)
 
-  if (!is.numeric(prop) || length(prop) != 1) {
-    cli::cli_abort("{.arg prop} must be a number")
+  level_w <- compute_weights(f, w)
+  # Compute proportion of total, including NAs
+  if (is.null(w)) {
+    prop_n <- level_w / length(f)
+  } else {
+    prop_n <- level_w / sum(w)
   }
 
-  prop_n <- calcs$count / calcs$total
   if (prop < 0) {
-    new_levels <- ifelse(prop_n <= -prop, levels(f), other_level)
+    lvls_other(f, prop_n <= -prop, other_level)
   } else {
-    new_levels <- ifelse(prop_n > prop, levels(f), other_level)
-  }
-
-  if (prop > 0 && sum(prop_n <= prop) <= 1) {
-    # No lumping needed
-    return(f)
-  }
-
-  if (other_level %in% new_levels) {
-    f <- lvls_revalue(f, new_levels)
-    fct_relevel(f, other_level, after = Inf)
-  } else {
-    f
+    lvls_other(f, prop_n > prop, other_level)
   }
 }
-
 
 #' @export
 #' @rdname fct_lump
 fct_lump_n <- function(f, n, w = NULL, other_level = "Other",
                        ties.method = c("min", "average", "first", "last", "random", "max")) {
-  ties.method <- match.arg(ties.method)
-  calcs <- check_calc_levels(f, w)
-  f <- calcs$f
+  f <- check_factor(f)
+  check_number_decimal(n)
+  check_string(other_level, allow_na = TRUE)
+  ties.method <- arg_match(ties.method)
 
-  if (!is.numeric(n) || length(n) != 1) {
-    cli::cli_abort("{.arg n} must be a number")
-  }
-
+  level_w <- compute_weights(f, w)
   if (n < 0) {
-    rank <- rank(calcs$count, ties.method = ties.method)
+    rank <- rank(level_w, ties.method = ties.method)
     n <- -n
   } else {
-    rank <- rank(-calcs$count, ties.method = ties.method)
+    rank <- rank(-level_w, ties.method = ties.method)
   }
 
-  new_levels <- ifelse(rank <= n, levels(f), other_level)
-
-  if (sum(rank > n) <= 1) {
-    # No lumping needed
-    return(f)
-  }
-
-  if (other_level %in% new_levels) {
-    f <- lvls_revalue(f, new_levels)
-    fct_relevel(f, other_level, after = Inf)
-  } else {
-    f
-  }
+  lvls_other(f, rank <= n, other_level)
 }
 
 #' @export
 #' @rdname fct_lump
-fct_lump_lowfreq <- function(f, other_level = "Other") {
-  calcs <- check_calc_levels(f, NULL)
-  f <- calcs$f
+fct_lump_lowfreq <- function(f, w = NULL, other_level = "Other") {
+  f <- check_factor(f)
+  check_string(other_level, allow_na = TRUE)
+  level_w <- compute_weights(f, w)
 
-  new_levels <- ifelse(!in_smallest(calcs$count), levels(f), other_level)
-
-  if (other_level %in% new_levels) {
-    f <- lvls_revalue(f, new_levels)
-    fct_relevel(f, other_level, after = Inf)
-  } else {
-    f
-  }
+  lvls_other(f, !in_smallest(level_w), other_level)
 }
 
-check_calc_levels <- function(f, w = NULL, call = caller_env()) {
-  f <- check_factor(f)
+
+# helpers -----------------------------------------------------------------
+
+compute_weights <- function(f, w = NULL, call = caller_env()) {
   w <- check_weights(w, length(f), call = call)
 
-  if (is.null(w)) {
-    count <- as.vector(table(f))
-    total <- length(f)
-  } else {
-    count <- as.vector(tapply(w, f, FUN = sum))
-    total <- sum(w)
-  }
-  list(f = f, count = count, total = total)
+  w <- w %||% rep(1L, length(f))
+  n <- as.vector(tapply(w, f, sum))
+  # fill in counts for empty levels
+  n[is.na(n)] <- 0
+
+  n
 }
 
 # Lump together smallest groups, ensuring that the collective
@@ -236,12 +195,15 @@ check_weights <- function(w, n = length(w), call = caller_env()) {
   }
 
   if (!is.numeric(w)) {
-    cli::cli_abort("{.arg w} must be a numeric vector", call = call)
+    cli::cli_abort(
+      "{.arg w} must be a numeric vector, not {.obj_type_friendly w}.",
+      call = call
+    )
   }
 
   if (length(w) != n) {
     cli::cli_abort(
-      "{.arg w} must be the same length as {.arg f} ({n}), not length {length(w)}",
+      "{.arg w} must be the same length as {.arg f} ({n}), not length {length(w)}.",
       call = call
     )
   }
@@ -249,10 +211,13 @@ check_weights <- function(w, n = length(w), call = caller_env()) {
   bad <- w < 0 | is.na(w)
   if (any(bad)) {
     probs <- which(bad)
-    cli::cli_abort(c(
-      "All {.arg w} must be non-negative and non-missing.",
-      "{length(probs)} problem{?s} at positions {probs}"
-    ), call = call)
+    cli::cli_abort(
+      c(
+        "All {.arg w} must be non-negative and non-missing.",
+        "{length(probs)} problem{?s} at positions {probs}."
+      ),
+      call = call
+    )
   }
 
   w
