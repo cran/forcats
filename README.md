@@ -9,17 +9,17 @@
 status](https://www.r-pkg.org/badges/version/forcats)](https://cran.r-project.org/package=forcats)
 [![R-CMD-check](https://github.com/tidyverse/forcats/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tidyverse/forcats/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/tidyverse/forcats/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tidyverse/forcats?branch=main)
+coverage](https://codecov.io/gh/tidyverse/forcats/graph/badge.svg)](https://app.codecov.io/gh/tidyverse/forcats)
 <!-- badges: end -->
 
 ## Overview
 
 R uses **factors** to handle categorical variables, variables that have
 a fixed and known set of possible values. Factors are also helpful for
-reordering character vectors to improve display. The goal of the
-**forcats** package is to provide a suite of tools that solve common
-problems with factors, including changing the order of levels or the
-values. Some examples include:
+reordering character vectors to improve display. The goal of the forcats
+package is to provide a suite of tools that solve common problems with
+factors, including changing the order of levels or the values. Some
+examples include:
 
 - `fct_reorder()`: Reordering a factor by another variable.
 - `fct_infreq()`: Reordering a factor by the frequency of values.
@@ -40,8 +40,8 @@ factors](https://r4ds.hadley.nz/factors.html) in R for Data Science.
     install.packages("forcats")
 
     # Or the the development version from GitHub:
-    # install.packages("devtools")
-    devtools::install_github("tidyverse/forcats")
+    # install.packages("pak")
+    pak::pak("tidyverse/forcats")
 
 ## Cheatsheet
 
@@ -59,8 +59,8 @@ library(ggplot2)
 ```
 
 ``` r
-starwars %>% 
-  filter(!is.na(species)) %>%
+starwars |> 
+  filter(!is.na(species)) |>
   count(species, sort = TRUE)
 #> # A tibble: 37 × 2
 #>    species      n
@@ -75,13 +75,13 @@ starwars %>%
 #>  8 Zabrak       2
 #>  9 Aleena       1
 #> 10 Besalisk     1
-#> # … with 27 more rows
+#> # ℹ 27 more rows
 ```
 
 ``` r
-starwars %>%
-  filter(!is.na(species)) %>%
-  mutate(species = fct_lump(species, n = 3)) %>%
+starwars |>
+  filter(!is.na(species)) |>
+  mutate(species = fct_lump(species, n = 3)) |>
   count(species)
 #> # A tibble: 4 × 2
 #>   species     n
@@ -101,8 +101,8 @@ ggplot(starwars, aes(x = eye_color)) +
 ![](man/figures/README-unordered-plot-1.png)<!-- -->
 
 ``` r
-starwars %>%
-  mutate(eye_color = fct_infreq(eye_color)) %>%
+starwars |>
+  mutate(eye_color = fct_infreq(eye_color)) |>
   ggplot(aes(x = eye_color)) + 
   geom_bar() + 
   coord_flip()
@@ -126,5 +126,4 @@ McNamara and Nicholas Horton.
 
 If you encounter a clear bug, please file a minimal reproducible example
 on [Github](https://github.com/tidyverse/forcats/issues). For questions
-and other discussion, please use
-[community.rstudio.com](https://community.rstudio.com/).
+and other discussion, please use <https://forum.posit.co/>.

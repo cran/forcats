@@ -33,7 +33,9 @@ lvls_reorder <- function(f, idx, ordered = NA) {
     cli::cli_abort("{.arg idx} must be numeric")
   }
   if (!setequal(idx, lvls_seq(f)) || length(idx) != nlevels(f)) {
-    cli::cli_abort("{.arg idx} must contain one integer for each level of {.arg f}")
+    cli::cli_abort(
+      "{.arg idx} must contain one integer for each level of {.arg f}"
+    )
   }
 
   refactor(f, levels(f)[idx], ordered = ordered)
@@ -93,8 +95,23 @@ refactor <- function(f, new_levels, ordered = NA) {
     ordered <- is.ordered(f)
   }
 
-  new_f <- factor(f, levels = new_levels, exclude = NULL, ordered = ordered)
+  new_f <- factor(f, levels = new_levels, exclude = NULL)
+
+  # First copy the attributes
   attributes(new_f) <- utils::modifyList(attributes(f), attributes(new_f))
+
+  # Now figure out the class: this complexity is needed to support classes
+  # like Hmisc::labelled which extends both factors and ordered factors
+  if (is.ordered(f) && !ordered) {
+    idx <- match("ordered", class(f))
+    class(new_f) <- class(f)[-idx]
+  } else if (!is.ordered(f) && ordered) {
+    idx <- match("factor", class(f))
+    class(new_f) <- append(class(f), "ordered", after = idx - 1)
+  } else {
+    class(new_f) <- class(f)
+  }
+
   new_f
 }
 
